@@ -1,7 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Components/CapsuleComponent.h"
 #include "BasePawn.h"
+#include "Components/CapsuleComponent.h"
+#include "DrawDebugHelpers.h"
+#include "Projectile.h"
+
 
 
 // Sets default values
@@ -24,6 +27,13 @@ ABasePawn::ABasePawn()
 }
 
 
+void ABasePawn::HandleDestruction()
+{
+	// TODO: Handle visual/sound effects
+
+}
+
+
 void ABasePawn::RotateTurret(FVector LookAtTarget)
 {
 	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
@@ -32,6 +42,22 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)
 	TurretMesh->SetWorldRotation(LookAtRotation);
 	
 }
+
+void ABasePawn::Fire()
+{
+
+	FVector Location = ProjectileSpawnPoint->GetComponentLocation();
+		FRotator Rotation = ProjectileSpawnPoint->GetComponentRotation();
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+		ProjectileClass, 
+		Location, 
+		Rotation
+		);
+
+	Projectile->SetOwner(this);
+
+}
+
 
 
 

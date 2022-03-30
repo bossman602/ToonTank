@@ -18,6 +18,8 @@ public:
 	// Called Every Frame
 	virtual void Tick(float DeltaTime) override;
 
+	void HandleDestruction();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -25,10 +27,20 @@ protected:
 private:
 
 	class ATank* Tank;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+		float FireRange = 700.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+		float FireRate = 2.0f;
+
+	FTimerHandle FireRateTimerHandle;
+
+	void CheckFireCondition();
+
+	bool InFireRange();
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank Properties", meta = (AllowPrivateAccess = "true"))
-	float FireRange = 700.0f;
+
 
 };

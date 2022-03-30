@@ -25,6 +25,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void HandleDestruction();
+
+	APlayerController* GetTankPlayerController() const { return TankPlayerController; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,21 +46,21 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	
-	APlayerController* PlayerControllerRef;
+	APlayerController* TankPlayerController;
 
 	void Move(float Value);
 
 	void Turn(float Value);
-	
-	void TurretRotation(float Value);
 
+	void Fire();
+	
 	FVector LookAtLocation;
 
 	float WorldDeltaTime;
 
-	//FVector2D GetMouseVelocity();
 
-	float MouseSmoothingStrength = 5.0f;
+
+	//FVector2D GetMouseVelocity();
 
 
 
