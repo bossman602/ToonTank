@@ -28,7 +28,14 @@ void AProjectile::BeginPlay()
 	Super::BeginPlay();
 
 	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
-	
+
+	if (LaunchSound) {
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			LaunchSound,
+			GetActorLocation()
+		);
+	}
 }
 
 // Called every frame
@@ -47,22 +54,34 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	if (HitParticles) {
+		UGameplayStatics::SpawnEmitterAtLocation(
+			this,
+			HitParticles,
+			GetActorLocation(),
+			GetActorRotation());
+	}
+	if (HitSound) {
 
-	UGameplayStatics::SpawnEmitterAtLocation(
-		this,
-		HitParticles,
-		GetActorLocation(),
-		GetActorRotation());
-
-
-	auto MyOwner = GetOwner();
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			HitSound,
+			OtherActor->GetActorLocation()
+			);
+	}
+	if (HitCameraShakeClass) 
+	{
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(HitCameraShakeClass);
+		
+	}
+	AActor* MyOwner = GetOwner();
 
 	// Move this to bottom!!!!
 
 
 	if (MyOwner == nullptr) return;
-	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
-	auto DamageTypeClass = UDamageType::StaticClass();
+	AController* MyOwnerInstigator = MyOwner->GetInstigatorController();
+	UClass* DamageTypeClass = UDamageType::StaticClass();
 
 	if (OtherActor && OtherActor != this && OtherActor != MyOwner) {
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);

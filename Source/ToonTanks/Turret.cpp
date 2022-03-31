@@ -51,7 +51,7 @@ void ATurret::CheckFireCondition()
 
 bool ATurret::InFireRange() {
 
-	if (Tank) {
+	if (Tank && Tank->IsHidden() != true) {
 		float Distance = FVector::Dist(GetActorLocation(), Tank->GetActorLocation());
 
 		if (Distance <= FireRange) {
@@ -63,4 +63,5 @@ bool ATurret::InFireRange() {
 
 
 }
+
 

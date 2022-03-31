@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Projectile.h"
+#include "Kismet/GameplayStatics.h"
 
 
 
@@ -30,6 +31,23 @@ ABasePawn::ABasePawn()
 void ABasePawn::HandleDestruction()
 {
 	// TODO: Handle visual/sound effects
+	if (DeathSound) {
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			DeathSound,
+			GetActorLocation()
+		);
+
+	}
+	if (DeathCameraShakeClass) {
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathCameraShakeClass);
+	}
+
+	UGameplayStatics::SpawnEmitterAtLocation(
+		this,
+		DeathEffect,
+		GetActorLocation(),
+		GetActorRotation());
 
 }
 
@@ -45,10 +63,9 @@ void ABasePawn::RotateTurret(FVector LookAtTarget)
 
 void ABasePawn::Fire()
 {
-
 	FVector Location = ProjectileSpawnPoint->GetComponentLocation();
 		FRotator Rotation = ProjectileSpawnPoint->GetComponentRotation();
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(
 		ProjectileClass, 
 		Location, 
 		Rotation
