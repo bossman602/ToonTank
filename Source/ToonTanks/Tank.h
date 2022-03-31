@@ -44,23 +44,25 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* SpringArm;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	
 	APlayerController* TankPlayerController;
-
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	float FireDelay = 1.5f;
+	bool bFiring = false;
 	void Move(float Value);
 
 	void Turn(float Value);
 
 	void Fire();
+
+	void SetbFiringFalse();
 	
+	FTimerHandle FireRateTimerHandle;
+
 	FVector LookAtLocation;
 
 	float WorldDeltaTime;
 
-
-
-	//FVector2D GetMouseVelocity();
 
 
 

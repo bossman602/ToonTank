@@ -96,11 +96,21 @@ void ATank::Turn(float Value)
 
 void ATank::Fire()
 {
-
-	ABasePawn::Fire();
+	
+	if (!bFiring) {
+		bFiring = true;
+		ABasePawn::Fire();
+		GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &ATank::SetbFiringFalse, FireDelay, false);
+	}
+	/*ABasePawn::Fire();*/
 
 	//UE_LOG(LogTemp, Warning, TEXT("Component Name: %s"), *ProjectileSpawnPoint->GetName());
 
 	/*DrawDebugSphere(GetWorld(),)*/
 
+}
+
+void ATank::SetbFiringFalse()
+{
+	bFiring = false;
 }

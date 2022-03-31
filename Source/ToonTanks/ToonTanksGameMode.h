@@ -20,6 +20,14 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartGame();
+	UFUNCTION(BlueprintImplementableEvent)
+	void GameOver(bool bWonGame);
+
+	int32 NumberOfTurrets = 0;
+	int32 GetTargetTurretCount();
+	
 private:
 	class ATank* Tank;
 	class AToonTanksPlayerController* ToonTanksPlayerController;
@@ -28,4 +36,5 @@ private:
 
 	void HandleGameStart();
 	
+
 };
